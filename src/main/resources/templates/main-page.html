@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Loop</title>
+  <style>
+    table th, table td {padding: 5px;}
+    .row  {
+      font-style: normal;
+      font-family: Cambria,serif;
+      font-weight: bold;
+    }
+    .even-row {
+      color: #383737;
+    }
+    .odd-row {
+      color: #be123a;
+    }
+    .btn {
+      display: inline-block;
+      background: #8C959D;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      border-radius: 3px;
+    }.btnExit {
+       display: inline-block;
+       background: #be123a;
+       color: #fff;
+       padding: 0.5rem 1rem;
+       text-decoration: none;
+       border-radius: 3px;
+     }
+  </style>
+</head>
+<body>
+<h1>Все пользователи</h1>
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Last Name</th>
+    <th>Age</th>
+    <th>Email</th>
+    <th>Role</th>
+    <th>Edit</th>
+    <th>Delete</th>
+  </tr>
+  <tr th:each="user : ${users}"
+      class="row" th:classappend="${user.toString()} ? 'odd-row' : 'even-row'">
+    <td th:utext="${user.getId()}">ID</td>
+    <td th:utext="${user.getName()}">Name</td>
+    <td th:utext="${user.getSurname()}">Surname</td>
+    <td th:utext="${user.getAge()}">Age</td>
+    <td th:utext="${user.getEmail()}">Email</td>
+    <td th:utext="${user.getRolesInfo()}">Roles</td>
+    <td><a class="btn" th:href="@{/admin/update-info/{id}(id = ${user.getId()})}">Edit</a></td>
+    <td><a class="btn" th:href="@{/admin/user-delete/{id}(id = ${user.getId()})}">Delete</a>
+  </tr>
+</table>
+<br>
+<a href="/admin/add-user" class="btn">Добавить пользователя</a>
+</body>
+<br>
+<br>
+<a th:href="@{/logout}" class="btnExit">Выйти</a>
+</html>
