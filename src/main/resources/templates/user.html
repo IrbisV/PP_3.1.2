@@ -1,11 +1,80 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Spring Security Example</title>
+  <meta charset="UTF-8">
+  <meta charset="UTF-8"/>
+  <!-- Обязательные метатеги -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <title>Привет пользователь: </title>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
-
-
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #282828">
+  <div class="container-fluid">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li class="nav-item mt-auto">
+        <p class="text-white fw-bold h4" th:utext="${currentUser.getEmail()}"></p>
+      </li>
+      <li class="nav-item mt-auto ms-2">
+        <p class="text-white fw-lighter h4"> with roles: </p>
+      </li>
+      <li class="nav-item mt-auto ps-2">
+        <p class="text-white fw-light h3" th:text="${currentUser.getRolesInfo()}"></p>
+      </li>
+    </ul>
+    <form class="d-flex" th:method="POST" th:action="@{/manualLogout}">
+      <button class="btn btn-dark" type="submit">Logout</button>
+    </form>
+  </div>
+</nav>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2 mt-3 p-0  pe-0">
+      <nav class="nav flex-column nav-pills">
+        <a class="nav-link active">User</a>
+      </nav>
+    </div>
+    <div class="col-10 px-5" style="background-color: #f6f6f6; height: 100vh">
+      <h1 class="py-3 mb-3">User information-page</h1>
+      <div class="card">
+        <div class="card-header bg-light mb-3">
+          <h3>About user</h3>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped border-top">
+            <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">Age</th>
+              <th scope="col">Email</th>
+              <th scope="col">Role</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${currentUser}">
+              <td><a th:text="${currentUser.getId()}"></a></td>
+              <td><a th:text="${currentUser.getName()}"></a></td>
+              <td><a th:text="${currentUser.getSurname()}"></a></td>
+              <td><a th:text="${currentUser.getAge()}"></a></td>
+              <td><a th:text="${currentUser.getEmail()}"></a></td>
+              <td><a th:text="${currentUser.getRolesInfo()}"></a></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
 </body>
 </html>
