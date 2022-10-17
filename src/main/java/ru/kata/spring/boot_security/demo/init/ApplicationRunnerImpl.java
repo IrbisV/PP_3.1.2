@@ -22,17 +22,17 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
         Role roleAdmin = new Role("ROLE_ADMIN");
         userService.save(roleUser);
         userService.save(roleAdmin);
-        User adminUser = new User("adminUser", "$2a$04$QTcUbeIMGII59bqkN7KOq.VAQWH1b8LNRnrl30hgxqkm9NZpnHn/W"
+        User adminUser = new User("adminUser", "adminUser"
                 , "Dmitriy", "Vanukov", 33
                 , "adminUser@mail.ru", new HashSet<>(Arrays.asList(roleUser, roleAdmin))); //pass - adminUser
         userService.save(adminUser);
 
-        User admin = new User("admin", "$2a$04$X/h0M0XWl7NfOg3te.63u.GtBgUAt8/ltpGEOzLdYaxEVjWSo8xOG"
+        User admin = new User("admin", "admin"
                 , "admin", "admin", 1
                 , "admin@mail.ru", new HashSet<>(Arrays.asList(roleAdmin))); //pass - admin
         userService.save(admin);
 
-        User user = new User("user", "$2a$04$Plwycnhbah8jPHOYjaxE9ez/9nEhrNdb8OUFtobzQtCqRp5jEVjGa"
+        User user = new User("user", "user"
                 , "user", "user", 1
                 ,"user@mail.ru", new HashSet<>(Arrays.asList(roleUser))); //pass - user
         userService.save(user);
