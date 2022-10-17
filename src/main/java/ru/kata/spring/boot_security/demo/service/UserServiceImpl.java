@@ -5,6 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
@@ -21,10 +22,11 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    private final PasswordEncoder passwordEncoder;
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     @Override
     public List<User> getAllUsers() {
@@ -43,7 +45,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void save(User user) {
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUsername(user.getEmail());
         userRepository.save(user);
     }
 
@@ -59,16 +62,31 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+    @Override
+    public void editUser(Long id, User user) {
+        User userToBeEdited = userRepository.getById(id);
+        userToBeEdited.setName(user.getName());
+        userToBeEdited.setUsername(user.getEmail());
+        userToBeEdited.setPassword(passwordEncoder.encode(user.getPassword()));
+        userToBeEdited.setEmail(user.getEmail());
+        userToBeEdited.setRoles(user.getRoles());
+        userToBeEdited.setAge(user.getAge());
+        userToBeEdited.setSurname(user.getSurname());
+    }
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 
     @Transactional
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new UsernameNotFoundException(String.format("User %s not found =(", username));
+            throw new UsernameNotFoundException(String.format("User %s not found", email));
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(), mapRolesToAuthorities(user.getRoles()));
