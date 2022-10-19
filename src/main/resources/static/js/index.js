@@ -132,7 +132,7 @@ getLoggedUser()
                         const delBtnIsPressed = event.target.id === 'userDeleteBtn'
                         const editBtnIsPressed = event.target.id === 'userEditBtn'
                         const userTableRowEl = event.target.parentElement.parentElement
-                        let user = allUsers.filter(user => user.id === userTableRowEl.dataset.id)[0]
+                        let user = allUsers.filter(user => user.id == userTableRowEl.dataset.id)[0]
                         if (delBtnIsPressed) {
                             handleUserModifyButtons(user, 'delete', userTableRowEl)
                         }
