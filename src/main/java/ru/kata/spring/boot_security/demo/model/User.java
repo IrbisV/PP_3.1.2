@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -95,9 +96,13 @@ public class User implements UserDetails {
     }
 
     public String getRolesInfo() {
-        return roles.stream().map(Role::getName).map(r -> r.substring(5))
-                .toList().toString().replace("[", "")
-                .replace("]", "");
+        if (roles == null) {
+            return "[null]";
+        } else {
+            return roles.stream().map(Role::getName).map(r -> r.substring(5))
+                    .toList().toString().replace("[", "")
+                    .replace("]", "");
+        }
     }
 
     public String getEmail() {
@@ -134,16 +139,28 @@ public class User implements UserDetails {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(name, surname, email, age, username);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || getClass() != this.getClass()) {
+            return false;
+        }
+        User that = (User) obj;
+        return Objects.equals(name, that.name)
+                && Objects.equals(surname, that.surname)
+                && Objects.equals(email, that.email)
+                && Objects.equals(age, that.age)
+                && Objects.equals(username, that.username);
+    }
+
+    @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", age=" + age +
-                ", email='" + email + '\'' +
-                ", roles=" + roles +
-                '}';
+        return "User{%s: %s}".formatted(id, email);
     }
 }
