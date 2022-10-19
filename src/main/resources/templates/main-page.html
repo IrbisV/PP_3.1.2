@@ -26,7 +26,7 @@
           <p class="text-white fw-light h3" th:text="${currentUser.rolesInfo}"></p>
         </li>
       </ul>
-      <form class="d-flex" th:method="POST" th:action="@{/manualLogout}">
+      <form class="d-flex" method="POST" action="/logout">
         <button class="btn btn-dark" type="submit">Logout</button>
       </form>
     </div>
@@ -82,7 +82,7 @@
                         <thead>
                         <tr>
                           <th scope="col">ID</th>
-                          <th scope="col">First Name</th>
+                          <th scope="col">Name</th>
                           <th scope="col">Last Name</th>
                           <th scope="col">Age</th>
                           <th scope="col">Email</th>
@@ -99,6 +99,7 @@
                           <td><a th:text="${user.getAge()}"></a></td>
                           <td><a th:text="${user.getEmail()}"></a></td>
                           <td><a th:text="${user.getRolesInfo()}"></a></td>
+
                           <td>
                             <div class="modal" tabindex="-1"
                                  th:id="${'editUser' + user.getId()}"
@@ -200,7 +201,7 @@
                                           Close
                                         </button>
                                         <button type="submit"
-                                                class="btn btn-primary">Edit
+                                                class="btn btn-primary">Save
                                         </button>
                                       </div>
                                     </div>

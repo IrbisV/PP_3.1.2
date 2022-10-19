@@ -8,6 +8,7 @@
     <title>Please Log In</title>
 </head>
 <body>
+
 <div class="row d-flex justify-content-center mt-5">
     <div class="col-md-3">
         <p class="fw-bold fs-1">Please sign in</p>
@@ -19,7 +20,7 @@
         </div>
     </div>
 </div>
-<form th:action="@{/login}" method="POST">
+<form action="/login" method="POST">
     <div class="row d-flex justify-content-center">
         <div class="col-4 px-5">
             <input type="text" name="email" class="form-control" placeholder="Email address"/>
