@@ -23,41 +23,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
-    @Override
-    public List<User> getAllUsers() {
 
-        return userRepository.findAll();
-    }
 
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
-    @Override
-    public User getUser(Long id) {
 
-        return userRepository.getById(id);
-    }
-
-    @Override
-    public void save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setUsername(user.getEmail());
-        userRepository.save(user);
-    }
 
     public void save(Role role) {
         roleRepository.save(role);
     }
-    @Override
-    public void deleteUser(Long id) {
 
-        userRepository.deleteById(id);
-    }
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -66,20 +48,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-    @Override
-    public void editUser(Long id, User user) {
-        User userToBeEdited = userRepository.getById(id);
-        userToBeEdited.setName(user.getName());
-        userToBeEdited.setUsername(user.getEmail());
-        userToBeEdited.setPassword(passwordEncoder.encode(user.getPassword()));
-        userToBeEdited.setEmail(user.getEmail());
-        userToBeEdited.setRoles(user.getRoles());
-        userToBeEdited.setAge(user.getAge());
-        userToBeEdited.setSurname(user.getSurname());
-    }
+
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
+
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -91,4 +64,37 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 
+    @Override
+    public void editUser(Long id, User user) {
+        User userToBeEdited = userRepository.getById(id);
+        userToBeEdited.setName(user.getName());
+        userToBeEdited.setUsername(user.getEmail());
+        userToBeEdited.setPassword(passwordEncoder.encode(user.getPassword()));
+        userToBeEdited.setEmail(user.getEmail());
+        userToBeEdited.setRoles(user.getRoles());
+        userToBeEdited.setAge(user.getAge());
+        userToBeEdited.setSurname(user.getSurname());
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public User getUser(Long id) {
+        return userRepository.getById(id);
+    }
+
+    @Override
+    public void save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUsername(user.getEmail());
+        userRepository.save(user);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 }
