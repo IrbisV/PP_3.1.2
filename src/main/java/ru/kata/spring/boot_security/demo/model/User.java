@@ -21,7 +21,7 @@ public class User implements UserDetails {
 
     private String surname;
 
-    private Integer age;
+    private int age;
     private String email;
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "users_roles",
@@ -79,11 +79,11 @@ public class User implements UserDetails {
         this.surname = surname;
     }
 
-    public Integer getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
@@ -99,9 +99,10 @@ public class User implements UserDetails {
         if (roles == null) {
             return "[null]";
         } else {
-            return roles.stream().map(Role::getName).map(r -> r.substring(5))
+            return roles.stream().map(Role::getName)
                     .toList().toString().replace("[", "")
-                    .replace("]", "");
+                    .replace("]", "").replace("ROLE_", "")
+                    .replace(",", "");
         }
     }
 
